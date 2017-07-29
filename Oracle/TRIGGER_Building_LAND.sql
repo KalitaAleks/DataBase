@@ -1,0 +1,14 @@
+CREATE OR REPLACE TRIGGER building_land 
+BEFORE INSERT OR UPDATE OF land
+ON BUILDING
+FOR EACH ROW
+DECLARE
+land_out_of_rage EXCEPTION;
+BEGIN
+IF(:NEW.land<200) THEN
+RAISE land_out_of_rage;
+END IF ;
+EXCEPTION 
+WHEN land_out_of_rage THEN
+RAISE_APPLICATION_ERROR(-20300,'land'|| TO_CHAR(:NEW.land)||'out of range');
+END;
